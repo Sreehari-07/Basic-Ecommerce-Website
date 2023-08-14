@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+This is the cart page. Proceed to review items and place an order. We offer a variety of products.
+{% endblock %}
+
+{% block title %}
+Cart - SHOP CART PVT LTD
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center my-4">Your Shopping Cart</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            {% if not cart_items %}
+            <div class="text-center">
+                <h2>Your shopping cart is empty.</h2>
+                <a href="{% url 'shop:All_ProdCat' %}" class="btn btn-primary mt-3">Continue Shopping</a>
+            </div>
+            {% else %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cart_item in cart_items %}
+                    <tr>
+                        <td>
+                            <img src="{{ cart_item.product.img.url }}" alt="{{ cart_item.product.name }}" class="img-fluid" width="100">
+                            <span class="ml-2">{{ cart_item.product.name }}</span>
+                        </td>
+                        <td>
+    <a href="{% url 'cart:add_cart' cart_item.product.id %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus"></i></a>
+    <input type="number" value="{{ cart_item.quantity }}" class="form-control d-inline-block mx-2 quantity-input" min="1" max="{{ cart_item.product.stock }}">
+    <a href="{% url 'cart:remove_single_item' cart_item.product.id %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-minus"></i></a>  <!-- Use the correct URL -->
+</td>
+
+                        <td>${{ cart_item.product.price }}</td>
+                        <td>${{ cart_item.sub_total }}</td>
+                        <td>
+                            <a href="{% url 'cart:remove_cart' cart_item.product.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Summary</h5>
+                    <p class="card-text">Total items: {{ counter }}</p>
+                    <p class="card-text">Total amount: ${{ total }}</p>
+                    <a href="#" class="btn btn-primary btn-block">Proceed to Checkout</a>
+                    <a href="{% url 'shop:All_ProdCat' %}" class="btn btn-secondary btn-block mt-2">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    {{ product.desc }}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ product.name }} - {{ category.name }} - SHOP-CART
+    {% else %}
+        {{ product.name }} - SHOP-CART
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <p><a href="{% url 'shop:All_ProdCat' %}" class="text-muted"><i class="fas fa-arrow-left"></i> Back to Products</a></p>
+            {% if category %}
+                <p><a href="{{ product.category.get_url }}" class="text-muted"><i class="fas fa-arrow-left"></i> Back to {{ product.category }}</a></p>
+            {% endif %}
+            <div class="product-image-container">
+                <img src="{{ product.img.url }}" alt="{{ product.name }}" class="product-image img-fluid" width="100%">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="product-details-container">
+                <h1>{{ product.name }}</h1>
+                <p class="product-price">${{ product.price }}</p>
+                <p class="product-description">{{ product.desc }}</p>
+                <div class="product-actions">
+                    {% if product.stock <= 0 %}
+                        <p class="out-of-stock-message"><strong>Out of Stock</strong></p>
+                    {% else %}
+<a href="{% url 'cart:add_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2 class="product-details-heading">Product Details:</h2>
+            <ul class="product-details-list">
+                <li><strong>Product Name:</strong> {{ product.name }}</li>
+                <li><strong>Price:</strong> ${{ product.price }}</li>
+                <li><strong>Category:</strong> {{ product.category }}</li>
+                <li><strong>Stock:</strong> {{ product.stock }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
